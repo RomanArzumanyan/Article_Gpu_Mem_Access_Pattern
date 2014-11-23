@@ -11,10 +11,11 @@ class GpuImg : public cv::Mat
 {
 public:
     scow_Mem_Object *device_picture;
+    scow_Mem_Object *picture_out;
 
     GpuImg(scow_Steel_Thread *pthread, std::string &filename);
     ~GpuImg();
-    void toGPU();
     void fromGPU();
+    void Show();
 };
 

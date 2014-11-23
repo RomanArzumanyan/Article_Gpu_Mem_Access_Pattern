@@ -5,9 +5,14 @@ void __kernel TestKernel(
 	int				height)
 {
 	int 
+		k = 16,
 		x = get_global_id(0),
-		y = get_global_id(1);
+		y = get_global_id(1) * k;
 
-	picture_out[x + y * width] = picture_in[x + y * width] / 2;
+	for(int i=0; i<k; i++){
+		picture_out[x + y*width] = picture_in[x + y*width];
+		y++;
+	}
+
 	return;
 }

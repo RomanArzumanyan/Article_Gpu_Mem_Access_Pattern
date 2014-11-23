@@ -8,6 +8,7 @@ void __kernel TestKernel(
 		x = get_global_id(0),
 		y = get_global_id(1);
 
-	picture_out[x + y * width] = picture_in[x + y * width] / 2;
+	picture_out[x + y * width] = picture_in[x + y * width];
+
 	return;
 }

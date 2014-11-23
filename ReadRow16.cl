@@ -5,9 +5,12 @@ void __kernel TestKernel(
 	int				height)
 {
 	int 
-		x = get_global_id(0),
+		k = 16,
+		x = get_global_id(0) * k,
 		y = get_global_id(1);
 
-	picture_out[x + y * width] = picture_in[x + y * width] / 2;
+	uchar16 row16 = vload16((x + y * width) / k, picture_in);
+	vstore16(row16, (x + y * width) / k, picture_out);
+
 	return;
 }

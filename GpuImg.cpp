@@ -9,20 +9,23 @@ Mat(imread(filename, CV_LOAD_IMAGE_GRAYSCALE))
 {
     std::size_t size = this->rows * this->cols * sizeof(*this->data);
     this->device_picture = Make_Buffer(pthread, CL_MEM_COPY_HOST_PTR, size, (void*)this->data);
+    this->picture_out = Make_Buffer(pthread, CL_MEM_READ_WRITE, size, NULL);
 }
-
 
 GpuImg::~GpuImg()
 {
     this->device_picture->Destroy(this->device_picture);
-}
-
-void GpuImg::toGPU()
-{
-    this->device_picture->Write(this->device_picture, CL_TRUE, (void*)this->data, MEASURE, NULL, NULL);
+    this->picture_out->Destroy(this->picture_out);
 }
 
 void GpuImg::fromGPU()
 {
-    this->device_picture->Read(this->device_picture, CL_TRUE, (void*)this->data, MEASURE, NULL, NULL);
+    this->picture_out->Read(this->picture_out, CL_TRUE, (void*)this->data, MEASURE, NULL, NULL);
+}
+
+void GpuImg::Show()
+{
+    namedWindow("Image", WINDOW_AUTOSIZE);
+    imshow("Image", *this);
+    waitKey(0);
 }
