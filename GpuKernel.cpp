@@ -14,7 +14,7 @@ GpuKernel::~GpuKernel()
     this->pkernel->Destroy(this->pkernel);
 }
 
-void GpuKernel::Launch(GpuImg &gpu_img, int size_x, int size_y)
+double GpuKernel::Launch(GpuImg &gpu_img, int size_x, int size_y)
 {
     unsigned int dim = 2;
     unsigned int wg[2];
@@ -29,5 +29,14 @@ void GpuKernel::Launch(GpuImg &gpu_img, int size_x, int size_y)
     scow_Kernel_Arg arg_height = K_ARG(gpu_img.rows);
     this->pkernel->Launch(this->pkernel, &this->pkernel->parent_steel_thread->q_cmd, 0, NULL, NULL, MEASURE, 
         arg_picture_in, arg_picture_out, arg_width, arg_height);
-    cout << "Time (1^e-6 s): " << this->pkernel->timer->Get_Last_Time(this->pkernel->timer, DEVICE_TIME);
+    return this->pkernel->timer->Get_Last_Time(this->pkernel->timer, DEVICE_TIME);
+}
+
+void GpuKernel::Bunch(GpuImg &gpu_img, int runs, int size_x, int size_y)
+{
+    double avg_time = 0;
+    for (int i = 0; i < runs; i++){
+        avg_time += Launch(gpu_img, size_x, size_y);
+    }
+    cout << avg_time / runs << endl;
 }
