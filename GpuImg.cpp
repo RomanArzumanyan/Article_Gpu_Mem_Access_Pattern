@@ -4,12 +4,12 @@
 
 using namespace cv;
 
-GpuImg::GpuImg(scow_Steel_Thread *pthread, std::string &filename) :
+GpuImg::GpuImg(scow_Steel_Thread *pthread, std::string &filename, cl_mem_flags flags) :
 Mat(imread(filename, CV_LOAD_IMAGE_GRAYSCALE))
 {
     std::size_t size = this->rows * this->cols * sizeof(*this->data);
-    this->device_picture = Make_Buffer(pthread, CL_MEM_COPY_HOST_PTR, size, (void*)this->data);
-    this->picture_out = Make_Buffer(pthread, CL_MEM_READ_WRITE, size, NULL);
+	this->device_picture = Make_Buffer(pthread, flags | CL_MEM_COPY_HOST_PTR, size, (void*)this->data);
+	this->picture_out = Make_Buffer(pthread, flags, size, NULL);
 }
 
 GpuImg::~GpuImg()

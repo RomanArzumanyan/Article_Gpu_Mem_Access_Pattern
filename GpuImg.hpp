@@ -13,7 +13,7 @@ public:
     scow_Mem_Object *device_picture;
     scow_Mem_Object *picture_out;
 
-    GpuImg(scow_Steel_Thread *pthread, std::string &filename);
+    GpuImg(scow_Steel_Thread *pthread, std::string &filename, cl_mem_flags flags = CL_MEM_READ_WRITE);
     ~GpuImg();
     void fromGPU();
     void Show();

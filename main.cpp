@@ -12,11 +12,23 @@ int main()
     SCOW_Set_Up();
     scow_Steel_Thread *pthread = Make_Steel_Thread(Pick_Device_By_Type(CL_DEVICE_TYPE_GPU));
 
-    std::string filename = "C:\\Images\\Shore.pgm";
-    GpuImg shore(pthread, filename);
-    shore.Show();
+    std::string filename = "Shore.pgm";
+    //GpuImg shore(pthread, filename);
+    GpuImg shore(pthread, filename, CL_MEM_ALLOC_HOST_PTR);
 
     const int runs = 8;
+
+#if 0
+	std::string kfile = "SimpleCopy.cl";
+	GpuKernel filter(pthread, kfile);
+	filter.Bunch(shore, runs, shore.cols, shore.rows);
+#endif
+
+#if 0
+	std::string kfile = "ReadRow2.cl";
+	GpuKernel filter(pthread, kfile);
+	filter.Bunch(shore, runs, shore.cols / 2, shore.rows);
+#endif
 
 #if 0
     std::string kfile = "ReadRow4.cl";
@@ -34,18 +46,6 @@ int main()
     std::string kfile = "ReadRow16.cl";
     GpuKernel filter(pthread, kfile);
     filter.Bunch(shore, runs, shore.cols / 16, shore.rows);
-#endif
-
-#if 0
-    std::string kfile = "ReadRow2.cl";
-    GpuKernel filter(pthread, kfile);
-    filter.Bunch(shore, runs, shore.cols / 2, shore.rows);
-#endif
-
-#if 0
-    std::string kfile = "SimpleCopy.cl";
-    GpuKernel filter(pthread, kfile);
-    filter.Bunch(shore, runs, shore.cols, shore.rows);
 #endif
 
 #if 0
@@ -114,9 +114,11 @@ int main()
     filter.Bunch(shore, runs, shore.cols / 8, shore.rows / 8);
 #endif
 
+#if 1
     std::string kfile = "ReadCol16x16.cl";
     GpuKernel filter(pthread, kfile);
     filter.Bunch(shore, runs, shore.cols / 16, shore.rows / 16);
+#endif
 
     shore.fromGPU();
     shore.Show();
