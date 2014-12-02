@@ -24,8 +24,8 @@ int main()
     scow_Steel_Thread *pthread = Make_Steel_Thread(Pick_Device_By_Type(CL_DEVICE_TYPE_GPU));
 
     std::string filename = "C:\\Images\\Shore.pgm";
-    //GpuImg shore(pthread, filename);
-    GpuImg shore(pthread, filename, CL_MEM_ALLOC_HOST_PTR);
+    GpuImg shore(pthread, filename);
+    //GpuImg shore(pthread, filename, CL_MEM_ALLOC_HOST_PTR);
 
     const int runs = 8;
     vector<Launch> launches({
@@ -49,6 +49,7 @@ int main()
     });
 
     for (auto it = launches.begin(); it != launches.end(); it++){
+        cout << it->fname << "\t";
         GpuKernel kern(pthread, it->fname);
         kern.Bunch(shore, runs, it->dimx, it->dimy);
     }

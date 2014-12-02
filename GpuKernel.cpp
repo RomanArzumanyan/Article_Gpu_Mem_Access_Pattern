@@ -34,9 +34,8 @@ double GpuKernel::Launch(GpuImg &gpu_img, int size_x, int size_y)
 
 void GpuKernel::Bunch(GpuImg &gpu_img, int runs, int size_x, int size_y)
 {
-    double avg_time = 0;
     for (int i = 0; i < runs; i++){
-        avg_time += Launch(gpu_img, size_x, size_y);
+        cout << Launch(gpu_img, size_x, size_y) << "\t";
     }
-    cout << avg_time / runs << endl;
+    cout << endl;
 }
